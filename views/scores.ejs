@@ -40,10 +40,19 @@
 		<thead>
 			<tr>
 				<th class="sorter" data-field="datetime">Date/Time</th>
-				<th>Start Level</th>
+				<th>
+					<div class="navbar-item has-dropdown is-hoverable">
+						<a class="navbar-link">
+							Start Level
+						</a>
+						<div class="navbar-dropdown">
+							<input id="level_select" class"navbar-item" type="number" min="0", max="255"/>
+						</div>
+					</div>
+				</th>
 				<th>End Level</th>
 				<th class="sorter" data-field="score">Score</th>
-				<th>Lines</th>
+				<th class="sorter" data-field="lines">Lines</th>
 				<th class="sorter" data-field="tetris_rate">Tetris Rate</th>
 				<th class="sorter" data-field="num_droughts">Num Droughts</th>
 				<th class="sorter" data-field="max_drought">Max Drought</th>
@@ -324,6 +333,23 @@
 		console.log(err);
 	}
 
+	try {
+		const level_select = document.querySelector("#level_select");
+		console.log(pagination)
+		if (!isNaN(pagination.level)) {
+			level_select.value = pagination.level
+		}
+
+		level_select.addEventListener("change", evt => {
+			if (!isNaN(level_select.value)) {
+				pagination.level = level_select.value;
+				load();
+			}
+		})
+	} catch(err) {
+		console.log(err)
+	}
+
 	document.querySelectorAll('th.sorter').forEach(th => {
 		const a = document.createElement('a');
 		a.href = '#';
@@ -336,10 +362,12 @@
 			const field = th.dataset.field;
 
 			if (pagination.sort_field === field) {
+				console.error("1 " + pagination.sort_field)
 				const idx = orders.indexOf(pagination.sort_order);
 				pagination.sort_order = orders[(idx + 1) % orders.length];
 			}
 			else {
+				console.error("2 " + pagination.sort_field)
 				pagination.sort_field = field;
 				pagination.sort_order = orders[0];
 			}

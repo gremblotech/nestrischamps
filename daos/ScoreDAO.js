@@ -354,7 +354,7 @@ class ScoreDAO {
 			`
 				SELECT id, datetime, start_level, end_level, score, lines, tetris_rate, num_droughts, max_drought, das_avg, duration, frame_file, competition
 				FROM scores
-				WHERE player_id=$1 ${filter_by_competition_mode}
+				WHERE player_id=$1 ${filter_by_competition_mode} ${options.level ? `AND start_level=${options.level}` : ''}
 				ORDER BY ${options.sort_field} ${options.sort_order} ${null_handling}
 				LIMIT ${options.page_size} OFFSET ${options.page_size * options.page_idx}
 			`,

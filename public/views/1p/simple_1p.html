@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="/views/tetris.css" />
@@ -121,6 +121,7 @@
 			connection.onMessage = function (frame) {
 				try {
 					const [method, ...args] = frame;
+					console.log(args);
 
 					API[method].apply(API, args);
 				} catch (e) {

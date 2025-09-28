@@ -231,10 +231,12 @@ router.get(
 		const PAGE_SIZE = 100;
 		const ALLOWED_ORDER_FIELDS = [
 			'datetime',
+			'lines',
 			'score',
 			'tetris_rate',
 			'num_droughts',
 			'max_drought',
+			'level',
 		];
 		const ALLOWED_ORDER_DIRS = ['desc', 'asc'];
 
@@ -243,6 +245,7 @@ router.get(
 			sort_order: 'desc',
 			page_idx: 0,
 			competition: null,
+			level: null,
 		};
 
 		// validate and get args from query
@@ -257,6 +260,8 @@ router.get(
 		if (/^\d+$/.test(req.query.page_idx)) {
 			options.page_idx = parseInt(req.query.page_idx, 10);
 		}
+
+		options.level = req.query.level;
 
 		options.competition = req.ntc.filter.competition;
 
