@@ -3,7 +3,8 @@ import dbPool from './db.js';
 import { parse } from 'csv-parse/sync';
 import { ulid } from 'ulid';
 import got from 'got';
-
+import { performance } from 'node:perf_hooks';
+import crypto from 'node:crypto';
 import ScoreDAO from '../daos/ScoreDAO.js';
 
 function identity(v) {
@@ -58,12 +59,35 @@ function getRivalAndReason(entry) {
 	return { rival, reason };
 }
 
+let lastHash = null;
+
 const _importUsers = async (
 	dbClient,
 	csvURL,
 	{ clearOldUsers } = { clearOldUsers: true }
 ) => {
 	const records_csv_content = await got(csvURL).text();
+
+	const init = performance.now();
+
+	let start = init;
+
+	const hash = crypto
+		.createHash('sha1')
+		.update(records_csv_content, 'utf8')
+		.digest('hex');
+
+	console.log(
+		`Response hash computed in ${(performance.now() - start).toFixed(4)}ms: ${hash}`
+	);
+
+	if (lastHash === hash) {
+		console.log(`No changes detected in CSV - skipping import`);
+		return { players: [] };
+	}
+
+	lastHash = hash;
+
 	const records = parse(records_csv_content, {
 		skip_empty_lines: true,
 	});
@@ -101,7 +125,9 @@ const _importUsers = async (
 	const NUMERIC_FIELDS = ['seed', 'pb18', 'pb19', 'pb29', 'num_maxouts', 'age'];
 
 	// 1. we extract all records from the sheet and convert that in NTC-compatible player data
+	start = performance.now();
 	const players = records.slice(1).map((record, index) => {
+		// slide(1) to skip header row
 		const id = START_ID + index;
 		const csv = Object.fromEntries(
 			CSV_FIELDS.map((key, i) => [key, record[i]])
@@ -131,6 +157,9 @@ const _importUsers = async (
 
 		return { id, csv, errors: player_errors };
 	});
+	console.log(
+		`Parsed ${players.length} players in ${(performance.now() - start).toFixed(4)}ms`
+	);
 
 	await sleep(1);
 
@@ -153,6 +182,7 @@ const _importUsers = async (
 	await sleep(1);
 
 	// 2. Transform data and Derive NTC values
+	start = performance.now();
 	players.forEach(player => {
 		const { id, csv } = player;
 
@@ -304,13 +334,21 @@ const _importUsers = async (
 		}
 	}
 
-	console.log(`DONE - Inserted ${players.length} players`);
+	console.log(
+		`${players.length} DB update in ${(performance.now() - start).toFixed(4)}ms`
+	);
+
+	console.log(
+		`DONE - Inserted ${players.length} players in ${(performance.now() - init).toFixed(4)}ms`
+	);
 
 	return { players };
 };
 
 export const importUsers = async options => {
 	if (process.env.LOCAL_USERS_ALLOW_IMPORT !== '1') return;
+
+	console.log('importUsers() running...');
 
 	// verify we are with a local DB
 	const dbURL = new URL(dbPool.options.connectionString);
@@ -346,8 +384,13 @@ export const importUsers = async options => {
 };
 
 if (
+	process.env.IS_PUBLIC_SERVER !== '1' &&
 	process.env.IN_SCRIPT !== '1' &&
-	/^[1-9]\d+$/.test(process.env.LOCAL_USERS_REFRESH)
+	/^[1-9]\d*$/.test(process.env.LOCAL_USERS_REFRESH)
 ) {
+	console.log(`starting local users import refresh background process...`);
 	setInterval(importUsers, parseInt(process.env.LOCAL_USERS_REFRESH) * 1000);
+
+	// fetch on startup
+	importUsers({ clearOldUsers: true }); // start up loading data
 }
