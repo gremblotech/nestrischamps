@@ -121,8 +121,6 @@
 			connection.onMessage = function (frame) {
 				try {
 					const [method, ...args] = frame;
-					console.log(args);
-
 					API[method].apply(API, args);
 				} catch (e) {
 					console.error(e);

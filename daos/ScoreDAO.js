@@ -311,6 +311,10 @@ class ScoreDAO {
 			additional_conditions += ` AND competition=$${args.length} `;
 		}
 
+		if ('level' in options && options.level != null) {
+			additional_conditions += ` AND start_level=${options.level} `;
+		}
+
 		const result = await dbPool.query(
 			`
 				SELECT count(*)

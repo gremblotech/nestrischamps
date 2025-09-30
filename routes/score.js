@@ -261,7 +261,9 @@ router.get(
 			options.page_idx = parseInt(req.query.page_idx, 10);
 		}
 
-		options.level = req.query.level;
+		if (/^[12]?\d$/.test(req.query.level)) {
+			options.level = req.query.level;
+		}
 
 		options.competition = req.ntc.filter.competition;
 
@@ -269,11 +271,12 @@ router.get(
 			req.session.user,
 			options
 		);
+
 		const num_pages = Math.ceil(num_scores / PAGE_SIZE) || 1;
 
 		options.page_idx = Math.max(0, Math.min(options.page_idx, num_pages - 1));
 
-		// WARNING: when we supply pagination parameters here, all field MUST be sanitized because inerpolates them in plain JS
+		// WARNING: when we supply pagination parameters here, all field MUST be sanitized because interpolates them in plain JS
 		const scores = await ScoreDAO.getScorePage(req.session.user, options);
 
 		res.render('scores', {
