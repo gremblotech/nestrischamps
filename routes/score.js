@@ -276,7 +276,7 @@ router.get(
 
 		options.page_idx = Math.max(0, Math.min(options.page_idx, num_pages - 1));
 
-		// WARNING: when we supply pagination parameters here, all field MUST be sanitized because interpolates them in plain JS
+		// WARNING: when we supply pagination parameters here, all field MUST be sanitized because getScorePage() interpolates them to construct the SQL query
 		const scores = await ScoreDAO.getScorePage(req.session.user, options);
 
 		res.render('scores', {
