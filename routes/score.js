@@ -262,7 +262,7 @@ router.get(
 		}
 
 		if (/^[12]?\d$/.test(req.query.level)) {
-			options.level = req.query.level;
+			options.level = parseInt(req.query.level, 10);
 		}
 
 		options.competition = req.ntc.filter.competition;
