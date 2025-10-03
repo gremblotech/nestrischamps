@@ -195,8 +195,8 @@ function getPages(page_idx, num_pages) {
 function getCompetitionFilter(req, res, next) {
 	const filter = {};
 
-	if (/^[01]$/.test(req.query.competition)) {
-		filter.competition = req.query.competition === '1';
+	if (/^[01]|true|false$/.test(req.query.competition)) {
+		filter.competition = /^1|true$/.test(req.query.competition);
 		filter.current = filter.competition
 			? 'Competition scores'
 			: 'Non-Competition scores';
