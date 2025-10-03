@@ -136,10 +136,16 @@
 		return `${score}`;
 	}
 
+	// handle competition filter links
 	document.querySelectorAll('a.filter').forEach(a => {
-		const m = (a.href || '').match(/#competition=(0|1)/);
-		const qs = m ? `?competition=${m[1]}` : '';
-		a.href = `${document.location.pathname}${qs}`;
+		a.addEventListener('click', evt => {
+			evt.preventDefault();
+
+			const m = (a.href || '').match(/#competition=(0|1)/);
+			pagination.competition = m ? m[1] : null;
+
+			load();
+		});
 	});
 
 	document.querySelectorAll('a.delete_score').forEach(a => {
@@ -328,6 +334,8 @@
 		for (const [key, value] of Object.entries(pagination)) {
 			if (value === null) {
 				url.searchParams.delete(key);
+			} else if (typeof value === 'boolean') {
+				url.searchParams.set(key, value ? 1 : 0);
 			} else {
 				url.searchParams.set(key, value);
 			}
@@ -340,7 +348,7 @@
 	// show up and/or down arrow on active sorter
 	try {
 		const sorter = document.querySelector(`th.sorter[data-field='${pagination.sort_field}']`);
-		sorter.textContent = `${sorter.textContent} ${pagination.sort_order === 'desc' ? '↓' : '↑'}`;
+		sorter.textContent += ` ${pagination.sort_order === 'desc' ? '↓' : '↑'}`;
 	}
 	catch(err) {
 		console.log(err);
