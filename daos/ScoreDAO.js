@@ -311,6 +311,11 @@ class ScoreDAO {
 			additional_conditions += ` AND competition=$${args.length} `;
 		}
 
+		if ('level' in options && options.level !== null) {
+			args.push(options.level);
+			additional_conditions += ` AND start_level=$${args.length} `;
+		}
+
 		const result = await dbPool.query(
 			`
 				SELECT count(*)
@@ -342,11 +347,16 @@ class ScoreDAO {
 				options.sort_order === 'desc' ? 'NULLS last' : 'NULLS first';
 		}
 
-		let filter_by_competition_mode = '';
+		let additional_conditions = '';
 
 		if ([true, false].includes(options.competition)) {
 			args.push(options.competition);
-			filter_by_competition_mode = ` AND competition=$${args.length} `;
+			additional_conditions = ` AND competition=$${args.length} `;
+		}
+
+		if ('level' in options && options.level !== null) {
+			args.push(options.level);
+			additional_conditions += ` AND start_level=$${args.length} `;
 		}
 
 		// WARNING: this query uses plain JS variable interpolation, parameters MUST be sane
@@ -354,7 +364,7 @@ class ScoreDAO {
 			`
 				SELECT id, datetime, start_level, end_level, score, lines, tetris_rate, num_droughts, max_drought, das_avg, duration, frame_file, competition
 				FROM scores
-				WHERE player_id=$1 ${filter_by_competition_mode}
+				WHERE player_id=$1 ${additional_conditions}
 				ORDER BY ${options.sort_field} ${options.sort_order} ${null_handling}
 				LIMIT ${options.page_size} OFFSET ${options.page_size * options.page_idx}
 			`,

@@ -195,8 +195,8 @@ function getPages(page_idx, num_pages) {
 function getCompetitionFilter(req, res, next) {
 	const filter = {};
 
-	if (/^[01]$/.test(req.query.competition)) {
-		filter.competition = req.query.competition === '1';
+	if (/^[01]|true|false$/.test(req.query.competition)) {
+		filter.competition = /^1|true$/.test(req.query.competition);
 		filter.current = filter.competition
 			? 'Competition scores'
 			: 'Non-Competition scores';
@@ -231,10 +231,12 @@ router.get(
 		const PAGE_SIZE = 100;
 		const ALLOWED_ORDER_FIELDS = [
 			'datetime',
+			'lines',
 			'score',
 			'tetris_rate',
 			'num_droughts',
 			'max_drought',
+			'level',
 		];
 		const ALLOWED_ORDER_DIRS = ['desc', 'asc'];
 
@@ -243,6 +245,7 @@ router.get(
 			sort_order: 'desc',
 			page_idx: 0,
 			competition: null,
+			level: null,
 		};
 
 		// validate and get args from query
@@ -258,17 +261,22 @@ router.get(
 			options.page_idx = parseInt(req.query.page_idx, 10);
 		}
 
+		if (/^[12]?\d$/.test(req.query.level)) {
+			options.level = parseInt(req.query.level, 10);
+		}
+
 		options.competition = req.ntc.filter.competition;
 
 		const num_scores = await ScoreDAO.getNumberOfScores(
 			req.session.user,
 			options
 		);
+
 		const num_pages = Math.ceil(num_scores / PAGE_SIZE) || 1;
 
 		options.page_idx = Math.max(0, Math.min(options.page_idx, num_pages - 1));
 
-		// WARNING: when we supply pagination parameters here, all field MUST be sanitized because inerpolates them in plain JS
+		// WARNING: when we supply pagination parameters here, all field MUST be sanitized because getScorePage() interpolates them to construct the SQL query
 		const scores = await ScoreDAO.getScorePage(req.session.user, options);
 
 		res.render('scores', {
