@@ -650,7 +650,8 @@ export class NTC_Producer_Wizard extends NtcComponent {
 				const playerConfig = Object.assign(getDefaultOcrConfig(), {
 					game_type,
 					palette: palette_selector.value,
-					brightness: 1,
+					brightness: 1.05,
+					contrast: 1.05,
 					tasks: this.#getTasks(rom_type, ui_xywh),
 				});
 
