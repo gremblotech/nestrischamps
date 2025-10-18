@@ -151,6 +151,7 @@ export async function playVideoFromDevice(video, options = {}) {
 					// { height: 1080, frameRate: 60 }, // works on OSX, freezes on windows ??
 					...(grid === '4x2'
 						? [
+								{ width: 3840, height: 1080, frameRate: halfFps, resizeMode }, // 960x540 x4 x2 (dual 1920x1080 4xmultiviewers side by side)
 								{ width: 2880, height: 972, frameRate: halfFps, resizeMode }, // 720x486 x4 x2
 								{ width: 2560, height: 960, frameRate: halfFps, resizeMode }, // 640x480 x4 x2
 							]
