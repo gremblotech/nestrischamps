@@ -187,6 +187,8 @@ class UserDAO {
 						}
 					}
 				} else if (options.provider === 'google') {
+					// in the case of google, we know the caller has provided a unique login already
+					// so we expect the insertion to just work
 					const res = await dbPool.query(
 						`INSERT INTO users
 						(login, secret, type, description, display_name, profile_image_url)
