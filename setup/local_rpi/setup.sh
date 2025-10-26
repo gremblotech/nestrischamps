@@ -2,7 +2,7 @@
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y git build-essential vim zsh gawk postgresql iptables coturn
+sudo apt install -y git build-essential vim zsh gawk postgresql coturn
 
 # Install oh-my-zsh without user interaction
 sudo chsh -s $(which zsh) "$(whoami)"
@@ -130,14 +130,21 @@ sudo systemctl restart nestrischamps
 sudo systemctl restart peerjs
 sudo systemctl restart coturn
 
-sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port ${PORT}
 
-sleep 5
+# create tables and chains if they do not exist
+sudo nft 'add table ip  nat' 2>/dev/null || true
+sudo nft 'add chain ip  nat PREROUTING { type nat hook prerouting priority -100; }' 2>/dev/null || true
+sudo nft 'add table ip6 nat' 2>/dev/null || true
+sudo nft 'add chain ip6 nat PREROUTING { type nat hook prerouting priority -100; }' 2>/dev/null || true
 
-echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
-echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
+# add rules for port 443 redirection to our app port on both ipv4 and ipv6
+sudo nft add rule ip  nat PREROUTING tcp dport 443 redirect to :"$PORT"
+sudo nft add rule ip6 nat PREROUTING tcp dport 443 redirect to :"$PORT"
 
-sudo apt install -y iptables-persistent
+# persist
+sudo nft list ruleset | sudo tee /etc/nftables.conf >/dev/null
+sudo systemctl enable --now nftables
+
 
 # generate public key fingerprint to tell OBS we trust the server
 PUB_KEY_FINGERPRINT=$(openssl x509 -in ${TLS_CERT_PATH} -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64)
