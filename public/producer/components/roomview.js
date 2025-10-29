@@ -184,7 +184,7 @@ export class NTC_Producer_RoomView extends NtcComponent {
 		);
 
 		// add specific settings
-		searchParams.set('tetris_sound', 0);
+		searchParams.set('sound', 0);
 		searchParams.set('video', 0);
 		searchParams.set('bg', 0);
 		searchParams.set('simultris', 0);

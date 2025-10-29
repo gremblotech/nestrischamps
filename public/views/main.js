@@ -107,8 +107,8 @@ function setVdoNinjaURL(_idx, url) {
 	}
 }
 
-const tetris_sound = new Audio('/views/Tetris_Clear.mp3');
-tetris_sound.volume = 0.35;
+const tetris_sound = new Audio('/views/tetris.mp3');
+tetris_sound.volume = 1;
 
 function onTetris() {
 	let remaining_frames = 12;
@@ -124,7 +124,7 @@ function onTetris() {
 	}
 
 	window.requestAnimationFrame(steps);
-	if (QueryString.get('tetris_sound') === '1') tetris_sound.play();
+	if (QueryString.get('sound') === '1') tetris_sound.play();
 }
 
 const user_colors = {};

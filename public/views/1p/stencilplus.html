@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="/views/tetris.css" />
@@ -136,7 +136,7 @@
 					field_pixel_size: 3,
 					preview_pixel_size: 3,
 					tetris_flash: 0,
-					tetris_sound: QueryString.get('tetris_sound') === '1',
+					sound: QueryString.get('sound') === '1',
 					format_score,
 					format_drought: v => v.toString().padStart(3, '0'),
 				}

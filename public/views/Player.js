@@ -192,7 +192,7 @@ const DEFAULT_OPTIONS = {
 			: '2',
 		10
 	),
-	tetris_sound: QueryString.get('tetris_sound') !== '0',
+	sound: QueryString.get('sound') !== '0',
 	stereo: 0, // [-1, 1] representing left:-1 to right:1
 	reliable_field: 1,
 	draw_field: 1,
@@ -245,8 +245,12 @@ const flagUrisFn = {
 
 const SOUNDS = {
 	tetris: {
-		source: '/views/Tetris_Clear.mp3',
-		gain: 0.35,
+		source: '/views/tetris.mp3',
+		gain: 1,
+	},
+	clear: {
+		source: '/views/clear.mp3',
+		gain: 1,
 	},
 };
 
@@ -829,7 +833,7 @@ export default class Player extends EventTarget {
 			step();
 		}
 
-		if (this.options.tetris_sound) {
+		if (this.options.sound) {
 			this.sounds.tetris();
 		}
 
@@ -1236,6 +1240,12 @@ export default class Player extends EventTarget {
 				.padStart(3, '0');
 
 			this.renderRunningTRT(frame.clears);
+		}
+
+		if (this.options.sound && clear_evt.cleared) {
+			if (clear_evt.cleared < 4) {
+				this.sounds.clear();
+			}
 		}
 
 		this.onLines(frame);
