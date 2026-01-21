@@ -47,6 +47,7 @@
 
 			.box .header {
 				padding-bottom: 6px;
+				color: #747474;
 			}
 
 			.board,
@@ -159,6 +160,7 @@
 			}
 
 			.name .header {
+				color: white;
 				font-size: 32.01px; /* sad -_- */
 				line-height: 32px; /* sad -_- */
 				padding-top: 18px;
@@ -223,7 +225,6 @@
 
 			.hearts {
 				bottom: -765px;
-				padding-right: 0;
 				height: unset;
 				font-size: 0px;
 				line-height: 32px;
@@ -232,17 +233,19 @@
 			}
 
 			.hearts span {
-				width: 24px;
+				width: 21px;
 				height: 30px;
 				overflow: hidden;
 				background: url(/views/heart_grey.png);
 				background-repeat: no-repeat;
-				background-position: center left;
+				background-position: center;
 				display: inline-block;
+				background-size: 85%;
 			}
 
 			.hearts span.win {
 				background-image: url(/views/heart_red.png);
+				background-size: unset;
 			}
 
 			.level,
@@ -833,6 +836,62 @@
 				curtain_template = document.getElementById(
 					`curtain_${QueryString.get('curtain')}`
 				);
+			}
+
+			// handle theme - the border image is stored here as a base64 encoding of its gif image
+			// since gif is a format that contains indexed colors, we can easily modify the colors by
+			// changing the relevant bytes in the file before creating a blob URL for it
+			const BASE64_SOURCE =
+				'R0lGODlhJAAkAPEDAAAAAHR0dJz78AAAACH5BAUKAAMALAAAAAAkACQAAAKynA+py60Ho5s02kEzu0aFD4biCD5SQqaqCXnqG7JuoNVAyeA2pc971kN9FIKi8Yg0+nLDRPKJXC500KpAKlVqtLfm1MulcINdmrNYG3uz6G273KC+xW+y/OrGw5lmQHii1semR6dnBzYHWLcm1PfnEBiHSKhoyLjnlwi5KNhIZPWE5XkGGjX65Vhqiin6gyrZ6dpKJouJ0AjzwnJblruSYDHjm7J7UrvA0XKMnNyxXDxQAAA7';
+			const TEMPLATE_BUF = Uint8Array.from(atob(BASE64_SOURCE), c =>
+				c.charCodeAt(0)
+			);
+
+			function getImageUrl(col1, col2) {
+				const buf = new Uint8Array(TEMPLATE_BUF); // Fast clone
+
+				buf[16] = (col1 >> 16) & 0xff;
+				buf[17] = (col1 >> 8) & 0xff;
+				buf[18] = col1 & 0xff;
+
+				buf[19] = (col2 >> 16) & 0xff;
+				buf[20] = (col2 >> 8) & 0xff;
+				buf[21] = col2 & 0xff;
+
+				// Faster than manual string concatenation for larger buffers
+				const blob = new Blob([buf], { type: 'image/gif' });
+				return URL.createObjectURL(blob);
+			}
+
+			if (
+				/^[0-9a-f]{6}(-[0-9a-f]{6})?$/i.test(QueryString.get('border-colors'))
+			) {
+				const colors = QueryString.get('border-colors').split('-');
+				let col1 = parseInt(colors[0], 16);
+				let col2 = colors[1] ? parseInt(colors[1], 16) : undefined;
+				let cssRules = [];
+
+				if (col2 === undefined) {
+					col2 = col1;
+					const col1r = ((col1 >> 16) & 0xff) >> 1;
+					const col1g = ((col1 >> 8) & 0xff) >> 1;
+					const col1b = ((col1 >> 0) & 0xff) >> 1;
+					col1 = (col1r << 16) | (col1g << 8) | col1b;
+
+					// use the dark color for normal headers, white for name header
+					cssRules.push(
+						`.box .header { color: #${col1.toString(16).padStart(6, '0')}}`,
+						`.box.name .header { color: white}`
+					);
+				}
+
+				cssRules.push(
+					`.box { border-image-source: url(${getImageUrl(col1, col2)}) }`
+				);
+
+				const stylesheet = new CSSStyleSheet();
+				stylesheet.replaceSync(cssRules.join('\n'));
+				document.adoptedStyleSheets = [stylesheet];
 			}
 
 			// triple-typed variable... that is disgusting -_-
