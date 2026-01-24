@@ -867,9 +867,10 @@
 				/^[0-9a-f]{6}(-[0-9a-f]{6})?$/i.test(QueryString.get('border-colors'))
 			) {
 				const colors = QueryString.get('border-colors').split('-');
+				const cssRules = [];
+
 				let col1 = parseInt(colors[0], 16);
 				let col2 = colors[1] ? parseInt(colors[1], 16) : undefined;
-				let cssRules = [];
 
 				if (col2 === undefined) {
 					col2 = col1;
@@ -880,8 +881,8 @@
 
 					// use the dark color for normal headers, white for name header
 					cssRules.push(
-						`.box .header { color: #${col1.toString(16).padStart(6, '0')}}`,
-						`.box.name .header { color: white}`
+						`.box .header { color: #${col1.toString(16).padStart(6, '0')} }`,
+						`.box.name .header { color: white }`
 					);
 				}
 
