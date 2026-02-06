@@ -45,7 +45,7 @@ openssl req -x509 \
   -keyout ${HOSTNAME}.key \
   -out ${HOSTNAME}.crt
 
-tee public/views/constants.js > /dev/null << EOF
+tee public/js/peerjsOptions.js > /dev/null << EOF
 export const peerServerOptions = {
 	host: '${HOSTNAME}',
 	path: '/',
