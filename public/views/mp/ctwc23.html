@@ -226,26 +226,26 @@
 			.hearts {
 				bottom: -765px;
 				height: unset;
+				padding: 5px 3px;
 				font-size: 0px;
 				line-height: 32px;
 				display: flex;
 				flex-direction: column-reverse;
+				gap: 9px;
 			}
 
 			.hearts span {
 				width: 21px;
-				height: 30px;
+				height: 21px;
 				overflow: hidden;
 				background: url(/views/heart_grey.png);
 				background-repeat: no-repeat;
 				background-position: center;
 				display: inline-block;
-				background-size: 85%;
 			}
 
 			.hearts span.win {
 				background-image: url(/views/heart_red.png);
-				background-size: unset;
 			}
 
 			.level,
@@ -456,11 +456,10 @@
 				--border-size: 14;
 				--offset: var(--score-offset);
 
-				width: unset;
 				top: 91px;
-				height: 29px;
-				padding: 0 6px 0 9px;
-				gap: 2px;
+				width: unset;
+				height: 21px;
+				padding: 4px 9px;
 				flex-direction: row-reverse;
 			}
 
@@ -535,6 +534,29 @@
 				}
 			}
 		</style>
+		<template id="hearts_1">
+			<style>
+				.hearts span {
+					width: 30px;
+					height: 30px;
+					background-image: url(/views/canada.svg);
+					background-size: cover;
+					filter: grayscale(100%) brightness(175%);
+				}
+
+				.hearts span.win {
+					background-image: url(/views/canada.svg);
+					transform: unset;
+					filter: none;
+				}
+
+				.heartpos3 .match.small .hearts,
+				.heartpos4 .match.small .hearts {
+					height: 29px;
+					padding: 0px 9px;
+				}
+			</style>
+		</template>
 	</head>
 	<body>
 		<template id="curtain_0">
@@ -893,6 +915,15 @@
 				const stylesheet = new CSSStyleSheet();
 				stylesheet.replaceSync(cssRules.join('\n'));
 				document.adoptedStyleSheets = [stylesheet];
+			}
+
+			// handle heart styles
+			if (/^[1]$/.test(QueryString.get('hearts'))) {
+				const template = document.getElementById(
+					`hearts_${QueryString.get('hearts')}`
+				);
+				const clone = template.content.cloneNode(true);
+				document.head.appendChild(clone);
 			}
 
 			// triple-typed variable... that is disgusting -_-

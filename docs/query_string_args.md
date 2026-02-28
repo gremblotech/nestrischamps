@@ -68,6 +68,7 @@ Caveat: global args apply to **MOST** layouts, but some layouts may not understa
 | `simultris` | An integer value representing the time difference in milliseconds where 2 tetrises are considered "simulatenous" | `0` | Shows an animated graphic "Simul-Tetris!" above the player cams. If the argument is omitted, or set to `0`, the graphic will not be displayed. Recommended value is `120` milliseconds. |
 | `invisible` | `0`: Don't draw invisible ghost blocks as ghost blocks <br>`1`: With invisible tetris, draw the invisible blocks as ghost blocks | `0` | This setting is only useful if the game is played in Invisible Tetris mode |
 | `heartpos` | `0`: bottom, vertical<br>`1`: next to LV/TRT, vertical<br>`2`: next to Lines/next, vertical<br>`3`: next to score, horizontal<br>`4`: under flag, horizontal | `0` | This setting affect the position of hearts in the 2-match view |
+| `hearts` | `0`: Standard heart graphic<br>`1`: Canadian Flag Leaves for hearts| `0` | This setting controls how hearts are rendered |
 | `srabbit_rate` | `0`: No placement ratings<br>`1`: Show placement ratings | `0` | This only works if `srabbit=1` is added |
 
 ### League
