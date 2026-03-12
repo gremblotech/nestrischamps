@@ -951,7 +951,7 @@ export default class Player extends EventTarget {
 
 		u.searchParams.delete('push');
 		u.searchParams.set('view', streamId);
-		u.searchParams.set('cover', 1);
+		u.searchParams.set('cover', '');
 		u.searchParams.set('cleanviewer', 1);
 		u.searchParams.set('cleanoutput', 1);
 		u.searchParams.set('transparent', 1);

@@ -282,7 +282,7 @@ export class NTC_Producer_Camera extends NtcComponent {
 
 			const viewURL = new URL('https://vdo.ninja/');
 			viewURL.searchParams.set('view', streamid);
-			viewURL.searchParams.set('cover', 1);
+			viewURL.searchParams.set('cover', '');
 			viewURL.searchParams.set('transparent', 0);
 
 			this.#player.sendVdoNinjaUrl(viewURL.toString());
