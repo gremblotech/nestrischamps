@@ -18,7 +18,10 @@
 	},
 	"keywords": [
 		"tetris",
-		"statistics"
+		"classic tetris",
+		"statistics",
+		"in-real-life events",
+		"competition"
 	],
 	"author": "",
 	"license": "ISC",
@@ -55,6 +58,7 @@
 	"devDependencies": {
 		"eslint": "^9.35.0",
 		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-jest": "^29.15.0",
 		"husky": "^9.1.7",
 		"jest": "^30.3.0",
 		"prettier": "^3.6.2",

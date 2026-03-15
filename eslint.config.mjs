@@ -16,7 +16,11 @@ const compat = new FlatCompat({
 export default defineConfig([
 	globalIgnores(['**/public']),
 	{
-		extends: compat.extends('eslint:recommended', 'prettier'),
+		extends: compat.extends(
+			'eslint:recommended',
+			'plugin:jest/recommended',
+			'prettier'
+		),
 
 		languageOptions: {
 			globals: {
