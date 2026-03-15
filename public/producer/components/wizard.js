@@ -343,7 +343,7 @@ export class NTC_Producer_Wizard extends NtcComponent {
 		);
 	}
 
-	#deviceSelectorChange = event => {
+	#deviceSelectorChange = () => {
 		const { device_selector, video_container, video } = this.#domrefs;
 
 		const device_id = device_selector.value;
@@ -372,7 +372,7 @@ export class NTC_Producer_Wizard extends NtcComponent {
 		]('is-hidden');
 	};
 
-	#romSelectorChange = async event => {
+	#romSelectorChange = async () => {
 		const { rom_selector, palette_selector, color_matching } = this.#domrefs;
 
 		const first_option = palette_selector.querySelector('option:first-child');
@@ -392,8 +392,6 @@ export class NTC_Producer_Wizard extends NtcComponent {
 			this.#finalizeRetron1HdConfig(rom_selector.value);
 			return;
 		} else {
-			const game_type = CONFIGS[rom_selector.value].game_type;
-
 			color_matching.classList.remove('is-hidden');
 			palette_selector.disabled = false;
 
@@ -594,7 +592,7 @@ export class NTC_Producer_Wizard extends NtcComponent {
 			// We get the serial port NOW (i.e. on handling a user gesture)
 			// On very first interaction, that will prompt the user to agree to use serial
 			// Not doing it now would mean not able to auto-start the everdrive capture later on, and in particular on refresh
-			const port = await getEDSerialPort();
+			await getEDSerialPort();
 		} catch (err) {
 			let msg = `Unexpected error requesting serial port: ${err.message}`;
 

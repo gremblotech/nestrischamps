@@ -70,7 +70,7 @@ export class NTC_Producer_RoomView extends NtcComponent {
 		this.#observer.disconnect();
 	}
 
-	#observerCallBack = (entries, observer) => {
+	#observerCallBack = (entries, _observer) => {
 		this.#destroyIframeTO = clearTimeout(this.#destroyIframeTO);
 
 		entries.forEach(entry => {

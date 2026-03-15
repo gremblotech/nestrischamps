@@ -884,15 +884,15 @@ export default class Player extends EventTarget {
 		this._showCurtain();
 	}
 
-	setDiff(diff, t_diff) {
+	setDiff(_diff, _t_diff) {
 		// implement in subclasses
 	}
 
-	setGameRunwayDiff(diff, t_diff) {
+	setGameRunwayDiff(_diff, _t_diff) {
 		// implement in subclasses
 	}
 
-	setProjectionDiff(diff, t_diff) {
+	setProjectionDiff(_diff, _t_diff) {
 		// implement in subclasses
 	}
 
@@ -1280,7 +1280,7 @@ export default class Player extends EventTarget {
 					: this.options.srabbit_playout_length,
 			};
 
-			const start = Date.now();
+			// const start = Date.now();
 			this.stackRabbitWorker
 				.rpc('getMove', params)
 				.then(recommendation => {
@@ -1360,7 +1360,7 @@ export default class Player extends EventTarget {
 		this.onPiece(frame);
 	}
 
-	_onGameStart(frame) {
+	_onGameStart(_frame) {
 		this._renderGameStart();
 		this.onGameStart();
 		this.dispatchEvent(new Event('gamestart'));
@@ -1593,7 +1593,7 @@ export default class Player extends EventTarget {
 
 	cancelGameOver() {
 		this.clearField();
-		if (game) {
+		if (this.game) {
 			this.game.over = false;
 		}
 	}

@@ -45,7 +45,7 @@ var saveAs =
 					)
 						? new Blob([String.fromCharCode(65279), t], {
 								type: t.type,
-						  })
+							})
 						: t;
 				},
 				r = function (t, n, e) {
@@ -71,14 +71,14 @@ var saveAs =
 							(r = f().createObjectURL(t)),
 							void p(function () {
 								var t, e;
-								(s.href = r),
+								((s.href = r),
 									(s.download = n),
 									(t = s),
 									(e = new MouseEvent('click')),
 									t.dispatchEvent(e),
 									i(),
 									w(r),
-									(o.readyState = o.DONE);
+									(o.readyState = o.DONE));
 							}, 0)
 						);
 					!(function () {
@@ -89,20 +89,20 @@ var saveAs =
 									var t = l
 										? e.result
 										: e.result.replace(/^data:[^;]*;/, 'data:attachment/file;');
-									c.open(t, '_blank') || (c.location.href = t),
+									(c.open(t, '_blank') || (c.location.href = t),
 										(t = void 0),
 										(o.readyState = o.DONE),
-										i();
+										i());
 								}),
 								e.readAsDataURL(t),
 								(o.readyState = o.INIT)
 							);
 						}
-						r || (r = f().createObjectURL(t)),
+						(r || (r = f().createObjectURL(t)),
 							a
 								? (c.location.href = r)
-								: c.open(r, '_blank') || (c.location.href = r);
-						(o.readyState = o.DONE), i(), w(r);
+								: c.open(r, '_blank') || (c.location.href = r));
+						((o.readyState = o.DONE), i(), w(r));
 					})();
 				},
 				e = r.prototype;
@@ -113,12 +113,12 @@ var saveAs =
 							n || (t = m(t)),
 							navigator.msSaveOrOpenBlob(t, e)
 						);
-				  }
+					}
 				: ((e.abort = function () {}),
-				  (e.readyState = e.INIT = 0),
-				  (e.WRITING = 1),
-				  (e.DONE = 2),
-				  (e.error =
+					(e.readyState = e.INIT = 0),
+					(e.WRITING = 1),
+					(e.DONE = 2),
+					(e.error =
 						e.onwritestart =
 						e.onprogress =
 						e.onwrite =
@@ -126,9 +126,9 @@ var saveAs =
 						e.onerror =
 						e.onwriteend =
 							null),
-				  function (t, e, n) {
+					function (t, e, n) {
 						return new r(t, e || t.name || 'download', n);
-				  });
+					});
 		}
 	})(
 		('undefined' != typeof self && self) ||
@@ -750,7 +750,7 @@ function createBPSFromFilesDelta(original, modified) {
 				offset++;
 			}
 			if (length > maxLength)
-				(maxLength = length), (mode = BPS_ACTION_SOURCE_READ);
+				((maxLength = length), (mode = BPS_ACTION_SOURCE_READ));
 		}
 
 		{
@@ -767,9 +767,9 @@ function createBPSFromFilesDelta(original, modified) {
 				)
 					length++;
 				if (length > maxLength)
-					(maxLength = length),
+					((maxLength = length),
 						(maxOffset = node.offset),
-						(mode = BPS_ACTION_SOURCE_COPY);
+						(mode = BPS_ACTION_SOURCE_COPY));
 				node = node.next;
 			}
 		}
@@ -783,9 +783,9 @@ function createBPSFromFilesDelta(original, modified) {
 					y = outputOffset;
 				while (y < targetSize && targetData[x++] == targetData[y++]) length++;
 				if (length > maxLength)
-					(maxLength = length),
+					((maxLength = length),
 						(maxOffset = node.offset),
-						(mode = BPS_ACTION_TARGET_COPY);
+						(mode = BPS_ACTION_TARGET_COPY));
 				node = node.next;
 			}
 

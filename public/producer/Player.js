@@ -102,6 +102,8 @@ export class Player extends EventTarget {
 
 			// no need to send frame
 			return;
+
+			// eslint-disable-next-line no-constant-condition
 		} while (false);
 
 		this.#lastFrame = localData;
@@ -182,8 +184,8 @@ export class Player extends EventTarget {
 				this.#peer = null;
 			}
 			this.#peer = new Peer(this.#connection.id, peerServerOptions);
-			this.#peer.on('open', err => {
-				console.log(Date.now(), 'peer opened', this.#peer.id);
+			this.#peer.on('open', id => {
+				console.log(Date.now(), `peer opened (${this.#peer.id} / ${id})`);
 				this.dispatchEvent(new CustomEvent('peer_open'));
 			});
 			this.#peer.on('error', err => {

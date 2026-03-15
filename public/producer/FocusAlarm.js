@@ -65,8 +65,6 @@ function stopUnfocusedAlarm() {
 }
 
 function monitor() {
-	++frame_count;
-
 	const now = Date.now();
 
 	if (last_frame_time) {

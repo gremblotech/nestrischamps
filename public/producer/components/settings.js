@@ -50,7 +50,6 @@ cssOverride.replaceSync(`
 
 export class NTC_Producer_Settings extends NtcComponent {
 	#domrefs;
-	#player;
 
 	constructor() {
 		super();
@@ -78,7 +77,6 @@ export class NTC_Producer_Settings extends NtcComponent {
 	}
 
 	async setPlayer(player) {
-		this.#player = player;
 		this.#domrefs.camera.setPlayer(player);
 	}
 }

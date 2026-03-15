@@ -86,7 +86,7 @@ async function readUntilPattern(reader, dataArray, compare) {
 				console.log('Flushed value', value);
 				break;
 			}
-		} catch (e) {
+		} catch (_err) {
 			console.error('Flushed Buffer');
 		}
 	}
@@ -212,7 +212,7 @@ export default class EDClient extends EventTarget {
 		];
 
 		// 1. send request
-		const res = await this.everdrive.writer.write(new Uint8Array(bytes));
+		await this.everdrive.writer.write(new Uint8Array(bytes));
 
 		performance.mark('edlink_write_end');
 
@@ -224,8 +224,8 @@ export default class EDClient extends EventTarget {
 				this.dataFrameBuffer,
 				GAME_FRAME_TAIL
 			);
-		} catch (e) {
-			console.error(`Error reading from everdrive: ${e}`);
+		} catch (err) {
+			console.error(`Error reading from everdrive: ${err}`);
 		}
 
 		const frameTime = performance.now();

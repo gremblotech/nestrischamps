@@ -35,7 +35,7 @@ export function hasConfig() {
 		const tasks = Object.values(parsed.tasks);
 		if (tasks.length <= 0) return false;
 		if (!tasks.every(task => !!task.crop)) return false;
-	} catch (err) {
+	} catch (_err) {
 		return false;
 	}
 

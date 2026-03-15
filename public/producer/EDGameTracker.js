@@ -32,36 +32,36 @@ const PIECE_ORIENTATION_TO_PIECE = [
 
 // prettier-ignore
 const PIECE_ORIENTATION_TO_BLOCK_POSITIONS = [
-    [[-1, 0], [0, 0], [1, 0], [0, -1]],  // T up
-    [[0, -1], [0, 0], [1, 0], [0, 1]],  // T right
-    [[-1, 0], [0, 0], [1, 0], [0, 1]],  // T down (spawn)
-    [[0, -1], [-1, 0], [0, 0], [0, 1]],  // T left
-    [[0, -1], [0, 0], [-1, 1], [0, 1]],  // J left
-    [[-1, -1], [-1, 0], [0, 0], [1, 0]],  // J up
-    [[0, -1], [1, -1], [0, 0], [0, 1]],  // J right
-    [[-1, 0], [0, 0], [1, 0], [1, 1]],  // J down (spawn)
-    [[-1, 0], [0, 0], [0, 1], [1, 1]],  // Z horizontal (spawn)
-    [[1, -1], [0, 0], [1, 0], [0, 1]],  // Z vertical
-    [[-1, 0], [0, 0], [-1, 1], [0, 1]],  // O (spawn)
-    [[0, 0], [1, 0], [-1, 1], [0, 1]],  // S horizontal (spawn)
-    [[0, -1], [0, 0], [1, 0], [1, 1]],  // S vertical
-    [[0, -1], [0, 0], [0, 1], [1, 1]],  // L right
-    [[-1, 0], [0, 0], [1, 0], [-1, 1]],  // L down (spawn)
-    [[-1, -1], [0, -1], [0, 0], [0, 1]],  // L left
-    [[1, -1], [-1, 0], [0, 0], [1, 0]],  // L up
-    [[0, -2], [0, -1], [0, 0], [0, 1]],  // I vertical
-    [[-2, 0], [-1, 0], [0, 0], [1, 0]],  // I horizontal (spawn)
+	[[-1, 0], [0, 0], [1, 0], [0, -1]],  // T up
+	[[0, -1], [0, 0], [1, 0], [0, 1]],  // T right
+	[[-1, 0], [0, 0], [1, 0], [0, 1]],  // T down (spawn)
+	[[0, -1], [-1, 0], [0, 0], [0, 1]],  // T left
+	[[0, -1], [0, 0], [-1, 1], [0, 1]],  // J left
+	[[-1, -1], [-1, 0], [0, 0], [1, 0]],  // J up
+	[[0, -1], [1, -1], [0, 0], [0, 1]],  // J right
+	[[-1, 0], [0, 0], [1, 0], [1, 1]],  // J down (spawn)
+	[[-1, 0], [0, 0], [0, 1], [1, 1]],  // Z horizontal (spawn)
+	[[1, -1], [0, 0], [1, 0], [0, 1]],  // Z vertical
+	[[-1, 0], [0, 0], [-1, 1], [0, 1]],  // O (spawn)
+	[[0, 0], [1, 0], [-1, 1], [0, 1]],  // S horizontal (spawn)
+	[[0, -1], [0, 0], [1, 0], [1, 1]],  // S vertical
+	[[0, -1], [0, 0], [0, 1], [1, 1]],  // L right
+	[[-1, 0], [0, 0], [1, 0], [-1, 1]],  // L down (spawn)
+	[[-1, -1], [0, -1], [0, 0], [0, 1]],  // L left
+	[[1, -1], [-1, 0], [0, 0], [1, 0]],  // L up
+	[[0, -2], [0, -1], [0, 0], [0, 1]],  // I vertical
+	[[-2, 0], [-1, 0], [0, 0], [1, 0]],  // I horizontal (spawn)
 ];
 
 // prettier-ignore
 const PIECE_ORIENTATION_TO_NTC_BLOCK_COLOR = [
-    1, 1, 1, 1, // T
-    2, 2, 2, 2, // J
-    3, 3, // Z
-    1, // O
-    2, 2, // S
-    3, 3, 3, 3, // L
-    1, 1 // I
+	1, 1, 1, 1, // T
+	2, 2, 2, 2, // J
+	3, 3, // Z
+	1, // O
+	2, 2, // S
+	3, 3, 3, 3, // L
+	1, 1 // I
 ];
 
 export default class EDGameTracker extends EventTarget {
@@ -218,9 +218,9 @@ export default class EDGameTracker extends EventTarget {
 
 		field.length = 200; // drops the tail
 
-		const gameModeState = gameModeStatePlayState >> 4;
+		const _gameModeState = gameModeStatePlayState >> 4;
 		const playState = gameModeStatePlayState & 0xf;
-		const gameStart = gameStartGameMode >> 4;
+		const _gameStart = gameStartGameMode >> 4;
 		const gameMode = gameStartGameMode & 0xf;
 
 		const frameCounter = (frameCounter1 << 8) | frameCounter0;

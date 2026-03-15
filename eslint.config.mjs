@@ -69,11 +69,12 @@ export default defineConfig([
 				...globals.browser,
 				...globals.commonjs,
 
-				// webGPU support
+				// webGPU and Media API support
 				GPUShaderStage: 'readonly',
 				GPUBufferUsage: 'readonly',
 				GPUTextureUsage: 'readonly',
 				GPUMapMode: 'readonly',
+				MediaStreamTrackProcessor: 'readonly',
 
 				// emu constants
 				importScripts: 'readonly',

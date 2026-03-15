@@ -29,7 +29,6 @@ export class CaptureDriver extends EventTarget {
 	#captureFrameCallbackId;
 	#captureDetails;
 	#skippedFrames = 0;
-	#then;
 
 	constructor(config, stream = null) {
 		super();
@@ -86,7 +85,7 @@ export class CaptureDriver extends EventTarget {
 				if (done) break;
 				yield videoFrame;
 			}
-		} catch (err) {
+		} catch (_err) {
 			// do nothing
 		} finally {
 			this.#captureReader.releaseLock();
@@ -94,13 +93,12 @@ export class CaptureDriver extends EventTarget {
 	}
 
 	async #updateCaptureDetails() {
-		let deviceLabel;
 		let trackFps = null;
 
 		try {
 			const track = this.#video.srcObject?.getVideoTracks()[0];
 			trackFps = track.getSettings().frameRate;
-		} catch (err) {
+		} catch (_err) {
 			// ignore 🤷
 		}
 
@@ -203,7 +201,6 @@ export class CaptureDriver extends EventTarget {
 		}
 
 		this.#working = true;
-		this.#then = now;
 
 		performance.clearMarks();
 		performance.clearMeasures();
