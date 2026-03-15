@@ -50,6 +50,7 @@ cssOverride.replaceSync(`
 
 export class NTC_Producer_Settings extends NtcComponent {
 	#domrefs;
+	#player;
 
 	constructor() {
 		super();
