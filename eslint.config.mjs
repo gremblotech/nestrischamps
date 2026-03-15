@@ -14,8 +14,9 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-	globalIgnores(['**/public']),
+	// Backend config
 	{
+		ignores: ['public/**'],
 		extends: compat.extends(
 			'eslint:recommended',
 			'plugin:jest/recommended',
@@ -28,6 +29,37 @@ export default defineConfig([
 					Object.entries(globals.browser).map(([key]) => [key, 'off'])
 				),
 				...globals.node,
+				...globals.commonjs,
+			},
+
+			ecmaVersion: 12,
+			sourceType: 'module',
+		},
+
+		rules: {
+			'no-unused-vars': [
+				'error',
+				{
+					varsIgnorePattern: '^_',
+					argsIgnorePattern: '^_',
+					caughtErrorsIgnorePattern: '^_',
+				},
+			],
+		},
+	},
+
+	// Frontend config
+	{
+		files: ['public/**'],
+		extends: compat.extends(
+			'eslint:recommended',
+			'plugin:jest/recommended',
+			'prettier'
+		),
+
+		languageOptions: {
+			globals: {
+				...globals.browser,
 				...globals.commonjs,
 			},
 
