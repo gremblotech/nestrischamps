@@ -7,7 +7,7 @@
 	"scripts": {
 		"start": "node -r dotenv/config server.js",
 		"session": "node -r dotenv/config scripts/set_session_ids.js",
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
 		"prepare": "husky install",
 		"concat": "node -r dotenv/config scripts/concat_games.js",
 		"rerun": "node -r dotenv/config scripts/rerun.js",
@@ -56,6 +56,7 @@
 		"eslint": "^9.35.0",
 		"eslint-config-prettier": "^10.1.8",
 		"husky": "^9.1.7",
+		"jest": "^30.3.0",
 		"prettier": "^3.6.2",
 		"pretty-quick": "^4.2.2"
 	}
