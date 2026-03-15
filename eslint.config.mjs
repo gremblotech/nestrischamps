@@ -51,6 +51,7 @@ export default defineConfig([
 	// Frontend config
 	{
 		files: ['public/**'],
+		ignores: ['public/vendor/**'],
 		extends: compat.extends(
 			'eslint:recommended',
 			'plugin:jest/recommended',
