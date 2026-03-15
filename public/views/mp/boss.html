@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="/views/tetris.css" />
@@ -143,7 +143,7 @@
 				players: 8,
 			});
 		</script>
-		<script src="/vendor/peerjs.1.5.4.min.js"></script>
+		<script src="/vendor/peerjs.1.5.5.min.js"></script>
 		<script type="module">
 			import QueryString from '/js/QueryString.js';
 			import '/views/bg.js';
@@ -330,9 +330,8 @@
 				let party_width = party_inner_width + 30;
 
 				// set the width, the min-width:480 protects
-				document.querySelector(
-					'#team2 .team-score'
-				).style.width = `${party_inner_width}px`;
+				document.querySelector('#team2 .team-score').style.width =
+					`${party_inner_width}px`;
 
 				if (party_inner_width < min_width) {
 					party_width = boss_width;
@@ -340,9 +339,8 @@
 					// we need to center the players
 					const x_offset = Math.floor((boss_width - party_players_width) / 2);
 
-					document.querySelector(
-						'#team2 .players'
-					).style.left = `${x_offset}px`;
+					document.querySelector('#team2 .players').style.left =
+						`${x_offset}px`;
 				}
 
 				// next center the 2 teams in the layout
