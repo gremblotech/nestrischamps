@@ -101,7 +101,7 @@ class TetrisCompetitionAPI {
 	}
 
 	resetVictories(clear_field = true) {
-		this.victories = players.map(p => 0);
+		this.victories = players.map(_p => 0);
 
 		players.forEach((player, idx) => {
 			this._repaintVictories(idx);
@@ -271,7 +271,7 @@ export class Competition {
 				QueryString.get('video') !== '0' && view_meta.get('video')
 			); // view_meta is a JS global (if it exists!) -- sort of gross
 			this.view_meta = view_meta;
-		} catch (err) {
+		} catch (_err) {
 			this.has_video = false;
 			this.view_meta = new URLSearchParams({});
 		}

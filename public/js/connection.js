@@ -50,7 +50,7 @@ export default class Connection {
 		}
 	}
 
-	_handleError(err) {
+	_handleError(_err) {
 		// console.error(err);
 	}
 
@@ -102,7 +102,7 @@ export default class Connection {
 			this.socket.removeEventListener('message', this._handleMessage);
 			this.socket.close();
 			this.socket = null;
-		} catch (e) {}
+		} catch (_err) {}
 	}
 
 	connect() {
@@ -141,6 +141,6 @@ export default class Connection {
 			} else {
 				this.socket.send(JSON.stringify(data));
 			}
-		} catch (err) {}
+		} catch (_err) {}
 	}
 }

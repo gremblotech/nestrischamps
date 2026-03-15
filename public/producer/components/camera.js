@@ -116,7 +116,7 @@ export class NTC_Producer_Camera extends NtcComponent {
 			this.startSharingVideoFeed();
 		});
 
-		player.addEventListener('drop_player', ({ detail }) => {
+		player.addEventListener('drop_player', () => {
 			this.is_player = false;
 			this.stopSharingVideoFeed();
 		});
@@ -224,7 +224,7 @@ export class NTC_Producer_Camera extends NtcComponent {
 
 		try {
 			this.#ongoing_call.close();
-		} catch (err) {}
+		} catch (_err) {}
 
 		this.#ongoing_call = null;
 	};

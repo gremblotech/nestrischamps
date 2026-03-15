@@ -61,7 +61,6 @@ export default class ArrayView {
 			case 'shift':
 			case 'unshift':
 			case 'fill':
-			case 'unshift':
 				throw new Error(
 					`Forbidden (${prop}): ArrayView instances are immutable`
 				);
@@ -70,7 +69,7 @@ export default class ArrayView {
 		throw new Error(`Error: Property not understood`, prop);
 	}
 
-	set(target, prop) {
+	set(_target, _prop) {
 		throw new Error('Forbidden: ArrayView instances are immutable');
 	}
 

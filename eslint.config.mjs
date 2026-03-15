@@ -13,6 +13,18 @@ const compat = new FlatCompat({
 	allConfig: js.configs.all,
 });
 
+const rules = {
+	'no-unused-vars': [
+		'error',
+		{
+			varsIgnorePattern: '^_',
+			argsIgnorePattern: '^_',
+			caughtErrorsIgnorePattern: '^_',
+		},
+	],
+	'no-empty': ['error', { allowEmptyCatch: true }],
+};
+
 export default defineConfig([
 	// Backend config
 	{
@@ -36,16 +48,7 @@ export default defineConfig([
 			sourceType: 'module',
 		},
 
-		rules: {
-			'no-unused-vars': [
-				'error',
-				{
-					varsIgnorePattern: '^_',
-					argsIgnorePattern: '^_',
-					caughtErrorsIgnorePattern: '^_',
-				},
-			],
-		},
+		rules,
 	},
 
 	// Frontend config
@@ -70,6 +73,7 @@ export default defineConfig([
 				GPUShaderStage: 'readonly',
 				GPUBufferUsage: 'readonly',
 				GPUTextureUsage: 'readonly',
+				GPUMapMode: 'readonly',
 
 				// emu constants
 				importScripts: 'readonly',
@@ -108,15 +112,6 @@ export default defineConfig([
 			sourceType: 'module',
 		},
 
-		rules: {
-			'no-unused-vars': [
-				'error',
-				{
-					varsIgnorePattern: '^_',
-					argsIgnorePattern: '^_',
-					caughtErrorsIgnorePattern: '^_',
-				},
-			],
-		},
+		rules,
 	},
 ]);

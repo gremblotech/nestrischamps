@@ -9,7 +9,7 @@ async function getSavedPalette() {
 			// TODO: verify that palette has right format too
 			return JSON.parse(saved_palette);
 		}
-	} catch (err) {}
+	} catch (_err) {}
 
 	return null;
 }
@@ -49,7 +49,7 @@ async function _loadPalettes() {
 			// TODO: verify that palette has right format too
 			_palettes._saved = JSON.parse(saved_palette);
 		}
-	} catch (err) {}
+	} catch (_err) {}
 
 	(await Promise.all(LIST.map(getPalette))).forEach((palette, idx) => {
 		_palettes[LIST[idx]] = palette;

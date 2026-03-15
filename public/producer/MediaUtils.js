@@ -53,7 +53,7 @@ export function logStreamDetails(stream) {
 
 export async function getStream(config) {
 	if (config.device_id === 'everdrive' || !config.device_id) {
-		throw new Exception(`getSream(): Unexpected device id`);
+		throw new Error(`getSream(): Unexpected device id`);
 	}
 
 	const ideal_frame_rate = config.cap_frame_rate || 60;

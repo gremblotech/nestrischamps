@@ -642,7 +642,7 @@ export class CpuTetrisOCR extends TetrisOCR {
 		];
 
 		const total_luma = pix_refs
-			.map(([x, y]) => {
+			.map(([x, _y]) => {
 				const col_idx = x << 2;
 				return luma(...img.data.subarray(col_idx, col_idx + 3));
 			})

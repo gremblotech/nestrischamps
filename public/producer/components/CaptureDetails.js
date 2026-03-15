@@ -1,6 +1,5 @@
 import { NtcComponent } from './NtcComponent.js';
 import { html } from '../StringUtils.js';
-import { getOcrClass } from '../ocrStrategy.js';
 
 const MARKUP = html`<dl id="data"></dl>`;
 

@@ -106,7 +106,7 @@ async function updateConstraints(newConstraints, useOldSettings = true) {
 	try {
 		await track.applyConstraints(newConstraints);
 		console.log('Successfully applied video constraints');
-	} catch (err) {
+	} catch (_err) {
 		console.warn('Unable to apply video constraints');
 	}
 
@@ -215,7 +215,7 @@ async function updateDeviceDetails(stream) {
 		return tr;
 	});
 
-	tbody.replaceChildren(...rows.filter(v => v));
+	dom.tbody.replaceChildren(...rows.filter(v => v));
 }
 
 const SMOOTHING_FACTOR = 1 / 15;
