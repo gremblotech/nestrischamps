@@ -148,7 +148,7 @@ export class Player extends EventTarget {
 			try {
 				const [method, ...args] = frame;
 
-				if (this.API.hasOwnProperty(method)) {
+				if (Object.hasOwn(this.API, method)) {
 					this.API[method](...args);
 				} else {
 					console.log(`Command ${method} received but not supported`);

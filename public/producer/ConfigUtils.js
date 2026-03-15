@@ -62,7 +62,7 @@ export async function loadConfig() {
 			};
 
 			for (const playerConf of parsed.players) {
-				if (!playerConf.hasOwnProperty('game_type')) {
+				if (!Object.hasOwn(playerConf, 'game_type')) {
 					playerConf.game_type = getGameTypeFromTasks(playerConf.tasks);
 				}
 
@@ -79,7 +79,7 @@ export async function loadConfig() {
 				};
 			}
 		} else {
-			if (!parsed.hasOwnProperty('game_type')) {
+			if (!Object.hasOwn(parsed, 'game_type')) {
 				parsed.game_type = getGameTypeFromTasks(parsed.tasks);
 			}
 
