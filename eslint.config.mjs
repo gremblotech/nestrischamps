@@ -32,7 +32,7 @@ export default defineConfig([
 				...globals.commonjs,
 			},
 
-			ecmaVersion: 12,
+			ecmaVersion: 2022,
 			sourceType: 'module',
 		},
 
@@ -63,7 +63,7 @@ export default defineConfig([
 				...globals.commonjs,
 			},
 
-			ecmaVersion: 12,
+			ecmaVersion: 2022,
 			sourceType: 'module',
 		},
 
