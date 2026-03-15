@@ -1,9 +1,9 @@
-name: Lint
+name: Test
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -13,7 +13,5 @@ jobs:
           node-version: '22.x'
       - name: Install modules
         run: npm install
-      - name: Run backend ESLint
-        run: npm run lint-be
-      - name: Run frontend ESLint
-        run: npm run lint-fe
+      - name: Run Jest tests
+        run: npm run test
