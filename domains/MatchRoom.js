@@ -11,7 +11,7 @@ const PRODUCER_FIELDS = [
 	'country_code',
 	'vdo_ninja_url',
 ];
-const MAX_PLAYERS = 8;
+const MAX_PLAYERS = 16;
 
 function getBasePlayerData() {
 	return {
