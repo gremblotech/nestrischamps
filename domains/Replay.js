@@ -7,9 +7,9 @@ import ScoreDAO from '../daos/ScoreDAO.js';
 import config from '../modules/config.js';
 
 class Replay {
-	constructor(connection, player_num, game_id_or_url, time_scale = 1) {
+	constructor(connection, player_idx, game_id_or_url, time_scale = 1) {
 		this.connection = connection;
-		this.player_num = player_num;
+		this.player_idx = player_idx;
 		this.game_id_or_url = game_id_or_url;
 		this.time_scale = time_scale;
 		this.frame_buffer = [];
@@ -49,22 +49,22 @@ class Replay {
 			// For attribution!
 			this.connection.send([
 				'setLogin',
-				this.player_num,
-				score_data.login || `Player ${this.player_num + 1}`,
+				this.player_idx,
+				score_data.login || `Player ${this.player_idx + 1}`,
 			]);
 			this.connection.send([
 				'setDisplayName',
-				this.player_num,
-				score_data.display_name || `Player ${this.player_num + 1}`,
+				this.player_idx,
+				score_data.display_name || `Player ${this.player_idx + 1}`,
 			]);
 			this.connection.send([
 				'setProfileImageURL',
-				this.player_num,
+				this.player_idx,
 				score_data.profile_image_url,
 			]);
 			this.connection.send([
 				'setCountryCode',
-				this.player_num,
+				this.player_idx,
 				score_data.country_code,
 			]);
 
@@ -153,9 +153,18 @@ class Replay {
 		if (this.send_timeout) return;
 		if (this.frame_buffer.length <= 0) return;
 
-		const frame = new Uint8Array(this.frame_buffer.shift());
+		let frame = new Uint8Array(this.frame_buffer.shift());
 
-		BinaryFrame.setPlayerIndex(frame, this.player_num);
+		if (this.player_idx > 8 && BinaryFrame.getFrameVersion(frame) < 4) {
+			// the current frame version supports up to 8 players
+			// so if the replay is older than that and we're trying to replay for a higher player index
+			// we need to update the frame version
+			const data = BinaryFrame.parse(buf);
+
+			frame = BinaryFrame.encode(data);
+		}
+
+		BinaryFrame.setPlayerIndex(frame, this.player_idx);
 
 		const tdiff = Math.round(
 			(BinaryFrame.getCTime(frame) - this.start_ctime) / this.time_scale
