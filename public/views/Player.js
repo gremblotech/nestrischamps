@@ -166,6 +166,7 @@ const DEFAULT_DOM_REFS = {
 	runway_lv29: DOM_DEV_NULL,
 	runway_lv39: DOM_DEV_NULL,
 	projection: DOM_DEV_NULL,
+	accuracy: DOM_DEV_NULL,
 	level: DOM_DEV_NULL,
 	lines: DOM_DEV_NULL,
 	trt: DOM_DEV_NULL,
@@ -875,6 +876,17 @@ export default class Player extends EventTarget {
 	_gameReset() {
 		this.winner_frame = 0;
 
+		this.stackrabbit_accuracy = {
+			evaluations: 0,
+			total_grade: 0,
+			grades: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 },
+			get overall() {
+				return this.evaluations === 0
+					? 0
+					: this.total_grade / (this.evaluations * 4);
+			},
+		};
+
 		this.preview_ctx.clear();
 		this.field_ctx.clear();
 		this.running_trt_ctx?.clear();
@@ -892,6 +904,7 @@ export default class Player extends EventTarget {
 		this.dom.trt.textContent = '-';
 		this.dom.eff.textContent = '-';
 		this.dom.burn.textContent = 0;
+		this.dom.accuracy.textContent = '-';
 
 		this._destroyGame();
 		this._showCurtain();
@@ -1383,6 +1396,16 @@ export default class Player extends EventTarget {
 								grade = 1;
 							} else {
 								grade = 0;
+							}
+
+							this.stackrabbit_accuracy.evaluations++;
+							this.stackrabbit_accuracy.grades[grade]++;
+							this.stackrabbit_accuracy.total_grade += grade;
+
+							if (this.dom.accuracy !== DOM_DEV_NULL) {
+								this.dom.accuracy.textContent = getPercent(
+									this.stackrabbit_accuracy.overall
+								);
 							}
 
 							this.onMoveRating({ params: moveParams, ratings, grade });
