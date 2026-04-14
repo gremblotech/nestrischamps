@@ -276,11 +276,10 @@ export default class Player extends EventTarget {
 		this.hide_profile_card_on_next_game = false;
 
 		const styles = getComputedStyle(this.dom.field);
+		const field_width = css_size(styles.width);
+		this._is_small_field = field_width < 79 * 4; // pixel size of 4
 
-		this.field_pixel_size = Math.max(
-			1,
-			Math.floor(css_size(styles.width) / 79)
-		);
+		this.field_pixel_size = Math.max(1, Math.ceil(field_width / 79));
 		this.preview_pixel_size =
 			this.options.preview_pixel_size || this.options.pixel_size;
 		this.render_running_trt_rtl = !!this.options.running_trt_rtl;
@@ -298,7 +297,7 @@ export default class Player extends EventTarget {
 			field_canva_offset_l;
 
 		if (field_padding_lr || field_padding_tb) {
-			bg_width = css_size(styles.width) + 2 * field_padding_lr;
+			bg_width = field_width + 2 * field_padding_lr;
 			bg_height = css_size(styles.height) + 2 * field_padding_tb;
 			bg_offset = 0;
 			field_canva_offset_t = field_padding_tb;
@@ -307,7 +306,7 @@ export default class Player extends EventTarget {
 			// when padding is zero, we assume the padding is embedded in the border itself and equal on all sides
 			// and the padding has the size of this.field_pixel_size
 			const effective_pixel_size = css_size(styles.width) / 79;
-			bg_width = css_size(styles.width) + effective_pixel_size * 2;
+			bg_width = field_width + effective_pixel_size * 2;
 			bg_height = css_size(styles.height) + effective_pixel_size * 2;
 			bg_offset = effective_pixel_size * -1;
 			field_canva_offset_t = effective_pixel_size;
@@ -586,24 +585,19 @@ export default class Player extends EventTarget {
 			custom_logo.src = url;
 			Object.assign(custom_logo.style, {
 				maxWidth:
-					this.options.field_pixel_size <= 4 && !this.options.biglogo
-						? '180px'
-						: '260px',
+					this._is_small_field && !this.options.biglogo ? '180px' : '260px',
 				marginTop:
-					this.options.field_pixel_size <= 4 && !this.options.biglogo
-						? '-100px'
-						: '-200px',
+					this._is_small_field && !this.options.biglogo ? '-100px' : '-200px',
 			});
 
 			const small_nestrischamps_logo = document.createElement('img');
-			small_nestrischamps_logo.src =
-				this.options.field_pixel_size <= 4
-					? '/brand/logo.v3.white.png'
-					: '/brand/logo.v3.white.2x.png';
+			small_nestrischamps_logo.src = this._is_small_field
+				? '/brand/logo.v3.white.png'
+				: '/brand/logo.v3.white.2x.png';
 
 			Object.assign(small_nestrischamps_logo.style, {
 				position: 'absolute',
-				bottom: this.options.field_pixel_size <= 4 ? '35px' : '55px',
+				bottom: this._is_small_field ? '35px' : '55px',
 			});
 
 			this.curtain_container.appendChild(custom_logo);
@@ -611,10 +605,9 @@ export default class Player extends EventTarget {
 		} else {
 			const big_nestrischamps_logo = document.createElement('img');
 			big_nestrischamps_logo.classList.add('logo');
-			big_nestrischamps_logo.src =
-				this.options.field_pixel_size < 4
-					? '/brand/logo.v3.white.2x.png'
-					: '/brand/logo.v3.white.3x.png';
+			big_nestrischamps_logo.src = this._is_small_field
+				? '/brand/logo.v3.white.2x.png'
+				: '/brand/logo.v3.white.3x.png';
 
 			this.curtain_container.appendChild(big_nestrischamps_logo);
 		}
