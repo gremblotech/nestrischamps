@@ -182,7 +182,6 @@ const DEFAULT_DOM_REFS = {
 };
 
 const DEFAULT_OPTIONS = {
-	preview_pixel_size: 3,
 	running_trt_dot_size: 4,
 	preview_align: 'c',
 	running_trt_rtl: 0,
@@ -279,8 +278,28 @@ export default class Player extends EventTarget {
 		this._is_small_field = field_width < 79 * 4; // pixel size of 4
 
 		this.field_pixel_size = Math.max(1, Math.ceil(field_width / 79));
-		this.preview_pixel_size =
-			this.options.preview_pixel_size || this.options.pixel_size;
+
+		this.preview_pixel_size = 3; // default
+
+		if (this.options.preview_pixel_size) {
+			this.preview_pixel_size = this.options.preview_pixel_size;
+		} else if (this.dom.preview && this.dom.preview !== DOM_DEV_NULL) {
+			const preview_styles = getComputedStyle(this.dom.preview);
+
+			do {
+				const preview_width = css_size(preview_styles.width);
+				if (preview_width <= 0) break;
+
+				const preview_height = css_size(preview_styles.height);
+				if (preview_height <= 0) break;
+
+				this.preview_pixel_size = Math.max(
+					1,
+					Math.floor(Math.min(preview_width / 31, preview_height / 15))
+				);
+			} while (false); // eslint-disable-line no-constant-condition
+		}
+
 		this.render_running_trt_rtl = !!this.options.running_trt_rtl;
 
 		// getComputedStyle returns padding in Chrome,
