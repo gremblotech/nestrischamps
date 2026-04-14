@@ -182,7 +182,6 @@ const DEFAULT_DOM_REFS = {
 };
 
 const DEFAULT_OPTIONS = {
-	field_pixel_size: 3,
 	preview_pixel_size: 3,
 	running_trt_dot_size: 4,
 	preview_align: 'c',
