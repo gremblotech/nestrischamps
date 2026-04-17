@@ -43,7 +43,7 @@
 		"glob": "^11.0.3",
 		"google-auth-library": "^10.3.0",
 		"got": "^14.4.8",
-		"lodash": "4.17.21",
+		"lodash": "^4.18.1",
 		"nocache": "4.0.0",
 		"passport-google-oauth20": "^2.0.0",
 		"pg": "^8.16.3",
