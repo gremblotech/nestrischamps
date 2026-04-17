@@ -53,7 +53,7 @@
 		"ws": "^8.18.3"
 	},
 	"engines": {
-		"node": "22.x"
+		"node": "24.x"
 	},
 	"devDependencies": {
 		"eslint": "^9.35.0",
