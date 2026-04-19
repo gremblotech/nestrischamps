@@ -32,8 +32,7 @@
 
 			.score,
 			.board,
-			.name,
-			.running_trt {
+			.name {
 				width: 356px;
 				--offset: -1px;
 			}
@@ -57,7 +56,8 @@
 			}
 
 			.qual .score .aligner {
-				line-height: 64px; /* centralize name vertically */
+				line-height: 64px;
+				/* centralize name vertically */
 			}
 
 			.score .aligner .diff {
@@ -103,7 +103,8 @@
 			}
 
 			.qual .name {
-				line-height: 46px; /* centralize name vertically */
+				line-height: 46px;
+				/* centralize name vertically */
 			}
 
 			.name .header {
@@ -161,10 +162,6 @@
 				width: 86px;
 			}
 
-			.running_trt {
-				display: none;
-			}
-
 			.drought {
 				color: red;
 
@@ -210,7 +207,8 @@
 
 			.match.small {
 				top: 0;
-				transform: scale(0.6916890080428955); /* (1080-32)/741/2 */
+				transform: scale(0.6916890080428955);
+				/* (1080-32)/741/2 */
 			}
 
 			#match2.small {
@@ -302,6 +300,7 @@
 			}
 		</style>
 	</head>
+
 	<body>
 		<template id="player">
 			<div class="player">
@@ -348,7 +347,6 @@
 					<div class="content">---</div>
 				</div>
 
-				<div class="box running_trt"></div>
 				<div class="box flag"></div>
 
 				<div class="box name">
@@ -414,7 +412,6 @@
 							level: player_node.querySelector(`.level .content`),
 							lines: player_node.querySelector(`.lines .content`),
 							trt: player_node.querySelector(`.tetris_rate .content`),
-							running_trt: player_node.querySelector(`.running_trt`),
 							preview: player_node.querySelector(`.next_piece`),
 							field: player_node.querySelector(`.board`),
 							drought: player_node.querySelector(`.drought .value`),
@@ -437,7 +434,6 @@
 							score_box: player_node.querySelector(`.score`),
 						},
 						{
-							running_trt_dot_size: 5,
 							preview_pixel_size: 3,
 							format_score: v => readableScoreFomatter(v, 7),
 							stereo: translate([1, 2], [-1, 1], player_num),
