@@ -233,6 +233,7 @@ const DEFAULT_OPTIONS = {
 		const value = QueryString.get('flags');
 		return /^(c?fi|fpw?)$/.test(value) ? value : 'cfi'; // cfi: country-flag-icons - fi: flag-icons
 	})(),
+	show_score_increments: QueryString.get('show_score_increments') === '1',
 	seekableFrames: false,
 };
 
@@ -276,6 +277,8 @@ export default class Player extends EventTarget {
 		const styles = getComputedStyle(this.dom.field);
 		const field_width = css_size(styles.width);
 		this._is_small_field = field_width < 79 * 4; // pixel size of 4
+
+		this.scoreStyles = window.getComputedStyle(this.dom.score);
 
 		this.field_pixel_size = Math.max(1, Math.ceil(field_width / 79));
 
@@ -584,6 +587,48 @@ export default class Player extends EventTarget {
 	showProfileCard(visible) {
 		this.profile_card.hidden = !visible;
 		// if (visible) this._refreshProfileCard(); // will this cause a flicker? -> yes :(
+	}
+
+	showPointIncrement(diff) {
+		const inc_el = document.createElement('div');
+
+		Object.assign(inc_el.style, {
+			position: 'absolute',
+			top: '10%',
+			left: '50%',
+			transform: 'translate(-50%, -50%)',
+			zIndex: 1000,
+			color: '#fff',
+			fontSize: this.scoreStyles.fontSize,
+			fontFamily: this.scoreStyles.fontFamily,
+			textShadow:
+				'-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0px 4px 5px rgba(0,0,0,0.5)',
+		});
+
+		inc_el.textContent = `+${diff}`;
+
+		this.dom.field.appendChild(inc_el);
+
+		const start = Date.now();
+		const duration = 1000;
+
+		const step = () => {
+			const elapsed = Date.now() - start;
+
+			const posOffset = easeOutQuad(elapsed, 0, 1, duration);
+			const opacity = easeInQuad(elapsed, 1, -1, duration);
+
+			inc_el.style.transform = `translate(-50%, calc(-50% - ${posOffset}em))`;
+			inc_el.style.opacity = opacity;
+
+			if (elapsed < duration) {
+				window.requestAnimationFrame(step);
+			} else {
+				inc_el.remove();
+			}
+		};
+
+		window.requestAnimationFrame(step);
 	}
 
 	setCurtainLogo(url) {
@@ -1216,6 +1261,15 @@ export default class Player extends EventTarget {
 
 	_renderScore(frame) {
 		const point_evt = peek(frame.points);
+
+		if (this.options.show_score_increments) {
+			const prev_point_evt = peek(frame.points, 1);
+			const diff =
+				(point_evt?.score.current || 0) - (prev_point_evt?.score.current || 0);
+			if (diff > 0) {
+				this.showPointIncrement(diff);
+			}
+		}
 
 		this.dom.score.textContent = this.options.format_score(
 			point_evt.score.current
