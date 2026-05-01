@@ -589,7 +589,7 @@ export default class Player extends EventTarget {
 		// if (visible) this._refreshProfileCard(); // will this cause a flicker? -> yes :(
 	}
 
-	showPointIncrement(diff) {
+	showScoreIncrement(diff) {
 		const inc_el = document.createElement('div');
 
 		Object.assign(inc_el.style, {
@@ -614,9 +614,10 @@ export default class Player extends EventTarget {
 
 		const step = () => {
 			const elapsed = Date.now() - start;
+			const ratio = Math.min(elapsed / duration, 1);
 
-			const posOffset = easeOutQuad(elapsed, 0, 1, duration);
-			const opacity = easeInQuad(elapsed, 1, -1, duration);
+			const posOffset = easeOutQuad(ratio, 0, 1, 1);
+			const opacity = easeInQuad(ratio, 1, -1, 1);
 
 			inc_el.style.transform = `translate(-50%, calc(-50% - ${posOffset}em))`;
 			inc_el.style.opacity = opacity;
@@ -1267,7 +1268,7 @@ export default class Player extends EventTarget {
 			const diff =
 				(point_evt?.score.current || 0) - (prev_point_evt?.score.current || 0);
 			if (diff > 0) {
-				this.showPointIncrement(diff);
+				this.showScoreIncrement(diff);
 			}
 		}
 

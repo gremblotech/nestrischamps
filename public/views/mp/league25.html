@@ -933,7 +933,7 @@
 				for (let player_idx = 0; player_idx < players.length; player_idx += 2) {
 					const match_players = players.slice(player_idx, player_idx + 2);
 
-					const handleScoreUpdate = function (frame) {
+					const handleScoreUpdate = () => {
 						competition.computeScoreDifferentials(match_players);
 					};
 
