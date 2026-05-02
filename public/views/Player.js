@@ -610,7 +610,7 @@ export default class Player extends EventTarget {
 		this.dom.field.appendChild(inc_el);
 
 		const start = Date.now();
-		const duration = 1000;
+		const duration = 850;
 
 		const step = () => {
 			const elapsed = Date.now() - start;
