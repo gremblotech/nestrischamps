@@ -605,6 +605,7 @@ export default class Player extends EventTarget {
 				'-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0px 4px 5px rgba(0,0,0,0.5)',
 		});
 
+		inc_el.classList.add('score_increment');
 		inc_el.textContent = `+${diff}`;
 
 		this.dom.field.appendChild(inc_el);
