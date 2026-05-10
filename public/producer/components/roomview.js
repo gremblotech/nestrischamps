@@ -189,6 +189,8 @@ export class NTC_Producer_RoomView extends NtcComponent {
 		searchParams.set('bg', 0);
 		searchParams.set('simultris', 0);
 		searchParams.set('srabbit', 0);
+		searchParams.set('show_score_increments', 0);
+		searchParams.set('explosions', 0);
 		// disable commentator bot, unless the player has specifically activated it
 		searchParams.set('combot', QueryString.get('combot') === '1' ? '1' : '0');
 		searchParams.set('in_producer', 1);
