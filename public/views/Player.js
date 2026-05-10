@@ -2,7 +2,13 @@ import QueryString from '/js/QueryString.js';
 import renderBlock from '/views/renderBlock.js';
 import FrameBuffer from '/views/FrameBuffer.js';
 import BaseGame from '/views/BaseGame.js';
-import { css_size, clamp, getPercent, peek } from '/views/utils.js';
+import {
+	css_size,
+	clamp,
+	getPercent,
+	peek,
+	readableScoreFomatter,
+} from '/views/utils.js';
 import Gradient from '/views/gradient.js';
 import { PIECE_COLORS, DOM_DEV_NULL, LINES } from '/views/constants.js';
 import addStackRabbitRecommendation from '/views/addStackRabbitRecommendation.js';
@@ -606,7 +612,7 @@ export default class Player extends EventTarget {
 		});
 
 		inc_el.classList.add('score_increment');
-		inc_el.textContent = `+${diff}`;
+		inc_el.textContent = `+${readableScoreFomatter(diff)}`;
 
 		this.dom.field.appendChild(inc_el);
 
