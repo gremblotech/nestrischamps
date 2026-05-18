@@ -385,6 +385,25 @@
 			.bo7 #overlay {
 				background: url(/images/league/Bo7NTC.png) no-repeat top left;
 			}
+
+			/* style overrides for score increments */
+			.board > .score_increment {
+				top: 180px !important;
+				width: 400px !important;
+				color: rgb(14, 255, 14) !important;
+			}
+
+			.p1 .board > .score_increment {
+				left: unset !important;
+				right: 200px !important;
+				text-align: right !important;
+			}
+
+			.p2 .board > .score_increment {
+				right: unset !important;
+				left: 595px !important;
+				text-align: left !important;
+			}
 		</style>
 	</head>
 
