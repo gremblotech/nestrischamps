@@ -1,0 +1,308 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/views/tetris.css" />
+		<style>
+			#stream_bg {
+				width: 1920px;
+				height: 1080px;
+			}
+
+			#playing_fields {
+				position: absolute;
+				left: 960px;
+				top: 47px;
+			}
+
+			.box {
+				padding: 3px;
+				font-size: 24px;
+				line-height: 24px;
+			}
+
+			.score {
+				--offset: 11px;
+
+				width: 353px;
+				height: 84px;
+				top: 0;
+
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			.score .content {
+				padding-top: 4px;
+
+				text-align: right;
+				font-size: 35px;
+				line-height: 42px;
+			}
+
+			.lines,
+			.next_piece {
+				--offset: 391px;
+
+				width: 138px;
+				height: 56px;
+			}
+
+			.lines {
+				top: 0;
+
+				font-size: 26px;
+
+				align-items: center;
+				flex-direction: column;
+				display: flex;
+
+				gap: 8px;
+			}
+
+			.next_piece {
+				top: 83px;
+			}
+
+			.board {
+				--border-size: 12;
+				--offset: 11px;
+
+				padding: 3px;
+				width: 359px;
+				height: 711px;
+				top: 111px;
+			}
+
+			.hearts,
+			.tetris_rate,
+			.drought,
+			.level {
+				--offset: 391px;
+
+				width: 71px;
+			}
+
+			.hearts {
+				width: 39px;
+				height: 130px;
+				padding: 0;
+				top: 516px;
+				display: grid;
+				z-index: 20;
+			}
+
+			.hearts .content {
+				font-size: 33px;
+				padding-top: 5px;
+				align-items: center;
+				justify-content: space-evenly;
+				display: flex;
+				gap: 6px;
+				flex-direction: column;
+				color: #b0afb0;
+			}
+
+			.hearts .win {
+				color: #fb0204;
+			}
+
+			.level,
+			.tetris_rate {
+				height: 56px;
+				z-index: 10;
+			}
+
+			.level {
+				top: 166px;
+
+				font-size: 26px;
+
+				align-items: center;
+				flex-direction: column;
+				display: flex;
+
+				gap: 8px;
+			}
+
+			.lines .header,
+			.lines .content,
+			.level .header,
+			.level .content {
+				padding-left: 4px;
+			}
+
+			.tetris_rate {
+				width: 66px;
+				top: 667px;
+
+				font-size: 20px;
+
+				align-items: center;
+				flex-direction: column;
+				display: flex;
+
+				gap: 6px;
+			}
+
+			.p1 * {
+				right: var(--offset);
+			}
+
+			.p2 * {
+				left: var(--offset);
+			}
+
+			.player_vid {
+				--offset: 400px;
+
+				position: absolute;
+				top: 0;
+				width: 560px;
+				height: 673px;
+				padding: 0;
+				object-fit: cover;
+			}
+
+			.divider {
+				position: absolute;
+				left: -6px;
+				width: 12px;
+				height: 828px;
+				color: #f8e889;
+				font-size: 22px;
+				padding-left: 1px;
+
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		</style>
+	</head>
+	<body>
+		<template id="player">
+			<div class="player">
+				<video class="player_vid"></video>
+
+				<div class="box hearts">
+					<div class="content">&#338;&#338;&#338;</div>
+				</div>
+
+				<div class="box score">
+					<div class="content">
+						<div class="main">0&#x202F;000&#x202F;000</div>
+						<div class="diff winning">0&#x202F;000&#x202F;000</div>
+					</div>
+				</div>
+
+				<div class="box lines">
+					<div class="header">LINES</div>
+					<div class="content">000</div>
+				</div>
+
+				<div class="box next_piece"></div>
+
+				<div class="box level">
+					<div class="header">LV</div>
+					<div class="content">00</div>
+				</div>
+
+				<div class="box tetris_rate">
+					<div class="header">TRT</div>
+					<div class="content">---</div>
+				</div>
+
+				<div class="box board"></div>
+			</div>
+		</template>
+
+		<div id="stream_bg">
+			<div id="playing_fields">
+				<!-- divider -->
+				<div class="divider">v</div>
+
+				<!-- Player 1 -->
+				<!-- Player 2 -->
+			</div>
+			<!-- End Playing Fields -->
+			<div class="ticker"></div>
+		</div>
+		<!-- End Stream BG -->
+
+		<!-- Audio -->
+
+		<script>
+			// custom view parameters which will be passed in the websocket URI
+			const view_meta = new URLSearchParams({
+				video: '1280x720', // urgh, so big for so much space wasted :(
+			});
+		</script>
+		<script src="/vendor/peerjs.1.5.5.min.js"></script>
+		<script type="module">
+			import '/views/bg.js';
+			import { peerServerOptions } from '/views/constants.js';
+			import { translate, readableScoreFomatter } from '/views/utils.js';
+			import QueryString from '/js/QueryString.js';
+			import CTMCompetitionPlayer from '/views/CTMCompetitionPlayer.js';
+			import Competition from '/views/competition.js';
+
+			const players_node = document.querySelector('#playing_fields');
+			const player_template = document.getElementById('player');
+			const players = [1, 2].map(num => {
+				const player_fragment = document.importNode(
+					player_template.content,
+					true
+				);
+				const player_node = player_fragment.querySelector('.player');
+
+				player_node.classList.add(`p${num}`);
+				players_node.appendChild(player_node);
+
+				const player = new CTMCompetitionPlayer(
+					{
+						score: player_node.querySelector(`.score .main`),
+						level: player_node.querySelector(`.level .content`),
+						lines: player_node.querySelector(`.lines .content`),
+						trt: player_node.querySelector(`.tetris_rate .content`),
+						preview: player_node.querySelector(`.next_piece`),
+						field: player_node.querySelector(`.board`),
+
+						diff: player_node.querySelector(`.score .diff`),
+						t_diff: player_node.querySelector(`.score .tetris_diff`),
+
+						hearts: player_node.querySelector(`.hearts .content`),
+						video: player_node.querySelector(`.player_vid`),
+					},
+					{
+						running_trt_dot_size: 5,
+						preview_pixel_size: 3,
+						format_score: v => readableScoreFomatter(v),
+						stereo: translate([1, 2], [-1, 1], num),
+					}
+				);
+
+				// Undo the CTM logic of hiding the level and preview
+				delete player.onGameOver;
+
+				// Ugly custom logic for game start because we only have callbacks, no events
+				const super_onGameStart = player.onGameStart;
+
+				player.onTransition = () => {
+					player.dom.runway_tr_box.querySelector('.header').textContent =
+						'TRANSITION';
+				};
+
+				player.onGameStart = () => {
+					super_onGameStart.call(player);
+
+					player.dom.runway_tr_box.querySelector('.header').textContent =
+						'TR RUNWAY';
+				};
+
+				return player;
+			});
+
+			const competition = new Competition(players);
+		</script>
+	</body>
+</html>
