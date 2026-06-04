@@ -84,27 +84,30 @@
 			}
 
 			.hearts {
-				width: 39px;
-				height: 130px;
-				padding: 0;
-				top: 516px;
-				display: grid;
-				z-index: 20;
-			}
-
-			.hearts .content {
-				font-size: 33px;
-				padding-top: 5px;
-				align-items: center;
-				justify-content: space-evenly;
+				bottom: -676px;
+				padding: 9px 6px;
+				height: unset;
+				width: unset;
+				font-size: 0px;
 				display: flex;
-				gap: 6px;
-				flex-direction: column;
-				color: #b0afb0;
+				flex-direction: column-reverse;
+				gap: 9px;
 			}
 
-			.hearts .win {
-				color: #fb0204;
+			.hearts span {
+				image-rendering: pixelated;
+				width: 28px;
+				height: 28px;
+				overflow: hidden;
+				background: url(/views/heart_grey.png);
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+				display: inline-block;
+			}
+
+			.hearts span.win {
+				background-image: url(/views/heart_red.png);
 			}
 
 			.level,
@@ -184,9 +187,7 @@
 			<div class="player">
 				<video class="player_vid"></video>
 
-				<div class="box hearts">
-					<div class="content">&#338;&#338;&#338;</div>
-				</div>
+				<div class="box hearts">&#338;</div>
 
 				<div class="box score">
 					<div class="content">
@@ -269,7 +270,7 @@
 
 						diff: player_node.querySelector(`.score .diff`),
 
-						hearts: player_node.querySelector(`.hearts .content`),
+						hearts: player_node.querySelector(`.hearts.box`),
 						video: player_node.querySelector(`.player_vid`),
 					},
 					{
