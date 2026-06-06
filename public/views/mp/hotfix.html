@@ -134,17 +134,36 @@
 				padding-left: 4px;
 			}
 
-			.tetris_rate {
-				width: 66px;
+			.tetris_rate,
+			.drought {
 				top: 667px;
+				width: 66px;
+				height: 53px;
+				padding: 3px 2px 3px 5px;
 
 				font-size: 20px;
+			}
 
-				align-items: center;
-				flex-direction: column;
-				display: flex;
+			.tetris_rate .header,
+			.drought .header {
+				padding-bottom: 4px;
+			}
 
-				gap: 6px;
+			.drought {
+				color: red;
+				display: none;
+			}
+
+			.drought.active {
+				display: block;
+				animation: 0.5s ease-out fadeIn;
+			}
+
+			.drought .header img {
+				padding-top: 3px;
+				margin-left: -2px;
+				vertical-align: top;
+				animation: 1s linear infinite fadeOut;
 			}
 
 			.p1 * {
@@ -203,6 +222,11 @@
 				<div class="box tetris_rate">
 					<div class="header">TRT</div>
 					<div class="content">---</div>
+				</div>
+
+				<div class="box drought">
+					<div class="header"><img src="/views/red_bar.png" /></div>
+					<div class="value">99</div>
 				</div>
 
 				<div class="box score">
@@ -264,11 +288,13 @@
 						level: player_node.querySelector(`.level .content`),
 						lines: player_node.querySelector(`.lines .content`),
 						trt: player_node.querySelector(`.tetris_rate .content`),
+						drought: player_node.querySelector(`.drought .value`),
 						preview: player_node.querySelector(`.next_piece`),
 						field: player_node.querySelector(`.board`),
 
 						diff: player_node.querySelector(`.score .diff`),
 
+						drought_box: player_node.querySelector(`.drought`),
 						hearts: player_node.querySelector(`.hearts.box`),
 						video: player_node.querySelector(`.player_vid`),
 					},
@@ -282,10 +308,24 @@
 				// Undo the CTM logic of hiding the level and preview
 				delete player.onGameOver;
 
+				player.onDroughtStart = () => {
+					player.dom.drought_box.classList.add('active');
+				};
+
+				player.onDroughtEnd = () => {
+					player.dom.drought_box.classList.remove('active');
+				};
+
+				player.onGameStart = () => {
+					player.onDroughtEnd();
+				};
+
 				return player;
 			});
 
 			const competition = new Competition(players);
+
+			window.players = players;
 		</script>
 	</body>
 </html>
