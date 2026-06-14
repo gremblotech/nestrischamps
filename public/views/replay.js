@@ -356,12 +356,10 @@ function computeStackRabbitRecommendations() {
 		gameIdx = (gameIdx + 1) % games.length;
 
 		const piece_evts = peek(game.frames).pieces;
-		if (pieceEvtIdx >= piece_evts.length) {
-			getNextRecommendation();
-			return;
-		}
 
-		await askStackRabbit(piece_evts[pieceEvtIdx]);
+		if (pieceEvtIdx < piece_evts.length) {
+			await askStackRabbit(piece_evts[pieceEvtIdx]);
+		}
 
 		getNextRecommendation();
 	}
