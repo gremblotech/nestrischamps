@@ -29,26 +29,16 @@ const STACKRABBIT_INPUT_TIMELINES = {
 	30: 'X.',
 };
 
-// Playback tracking variables
-let playing = false,
-	games,
-	reference_game,
-	reference_frame,
-	refs,
-	autoplay = QueryString.get('autoplay') != '0',
+// Replay constants (i.e. one-off query-string tunables)
+const autoplay = QueryString.get('autoplay') != '0',
 	time_scale = (() => {
 		const value = QueryString.get('speed');
 		return /^[12345]$/.test(value) ? parseInt(value, 10) : 1;
 	})(),
-	start_ctime,
-	start_time,
 	start_ts = (() => {
 		const value = QueryString.get('ts');
 		return /^[1-9]\d+$/.test(value) ? parseInt(value, 10) : 0;
 	})(),
-	showFrame,
-	play_timeout,
-	stackRabbitWorker = null,
 	srabbit_input_speed = (() => {
 		const value = QueryString.get('srabbit_input_speed');
 		return /^\d+(_5)?$/.test(value) && value in STACKRABBIT_INPUT_TIMELINES
@@ -58,8 +48,20 @@ let playing = false,
 	srabbit_playout_length = (() => {
 		const value = QueryString.get('srabbit_playout_length');
 		return /^[123]$/.test(value) ? parseInt(value, 10) : 2;
-	})();
-const use_piece_stats = QueryString.get('use_piece_stats') === '1';
+	})(),
+	use_piece_stats = QueryString.get('use_piece_stats') === '1';
+
+// Playback tracking variables
+let playing = false,
+	games,
+	reference_game,
+	reference_frame,
+	refs,
+	start_ctime,
+	start_time,
+	showFrame,
+	play_timeout,
+	stackRabbitWorker = null;
 
 export async function getReplayGame(gameid) {
 	const game_url = `/api/games/${gameid}`;
