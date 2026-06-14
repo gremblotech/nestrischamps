@@ -26,6 +26,7 @@ function getStackRabbitArgString(args) {
 			? Math.pow(7, args.playoutLength)
 			: args.playoutCount;
 	const currentPieceIndex = SR_PIECES_INDEXES[args.currentPiece];
+	// eslint-disable-next-line no-prototype-builtins -- Safe here as SR_PIECES_INDEXES is a local constant literal
 	const nextPieceIndex = SR_PIECES_INDEXES.hasOwnProperty(args.nextPiece)
 		? SR_PIECES_INDEXES[args.nextPiece]
 		: -1;
