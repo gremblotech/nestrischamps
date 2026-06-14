@@ -31,10 +31,6 @@ const STACKRABBIT_INPUT_TIMELINES = {
 
 // Replay constants (i.e. one-off query-string tunables)
 const autoplay = QueryString.get('autoplay') != '0',
-	time_scale = (() => {
-		const value = QueryString.get('speed');
-		return /^[12345]$/.test(value) ? parseInt(value, 10) : 1;
-	})(),
 	start_ts = (() => {
 		const value = QueryString.get('ts');
 		return /^[1-9]\d+$/.test(value) ? parseInt(value, 10) : 0;
@@ -54,6 +50,10 @@ const autoplay = QueryString.get('autoplay') != '0',
 
 // Playback tracking variables
 let playing = false,
+	time_scale = (() => {
+		const value = QueryString.get('speed');
+		return /^[12345]$/.test(value) ? parseInt(value, 10) : 1;
+	})(),
 	games,
 	reference_game,
 	reference_frame,
