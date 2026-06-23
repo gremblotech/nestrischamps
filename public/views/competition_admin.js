@@ -24,6 +24,7 @@ const dom = {
 	show_profile_cards_controls: document.querySelector(
 		'#show_profile_cards_controls'
 	),
+	hide_all_profile_cards: document.querySelector('#hide_all_profile_cards'),
 	allow_autojoin: document.querySelector('#allow_autojoin'),
 	add_player: document.querySelector('#add_player'),
 	curtain_logo_url: document.querySelector('#curtain_logo_url'),
@@ -689,6 +690,17 @@ function bootstrap() {
 				remoteAPI.showProfileCard(this.checked, this.value);
 			});
 		});
+
+	dom.hide_all_profile_cards.addEventListener('click', () => {
+		remoteAPI.showProfileCard(false, 0);
+		remoteAPI.showProfileCard(false, 1);
+
+		dom.show_profile_cards_controls
+			.querySelectorAll('input')
+			.forEach(checkbox => {
+				checkbox.checked = false;
+			});
+	});
 
 	dom.allow_autojoin.addEventListener('click', function () {
 		remoteAPI.allowAutoJoin(this.checked);
