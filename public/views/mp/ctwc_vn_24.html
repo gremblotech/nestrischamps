@@ -259,7 +259,7 @@
 				right: var(--offset);
 				width: 444px;
 				height: unset;
-				bottom: -1023px;
+				bottom: -1022px;
 				--border-size: 12;
 				padding: 3px 3px 1px 6px;
 			}
@@ -547,6 +547,8 @@
 
 				<div class="box board"></div>
 
+				<div class="box flag"></div>
+
 				<div class="box runways">
 					<div class="label">
 						<div class="lv19">LVL 19&#x202F;TỐI ĐA</div>
@@ -559,8 +561,6 @@
 						<div class="lv39">0&#x202F;000&#x202F;000</div>
 					</div>
 				</div>
-
-				<div class="box flag"></div>
 
 				<img class="simul-tetris" src="/images/simul-tetris.png" />
 			</div>
@@ -678,6 +678,30 @@
 					return img;
 				});
 			}
+
+			const lang = (val => {
+				return val === 'en' ? val : 'vn';
+			})(QueryString.get('ui_lang'));
+
+			// handle localizations (poor man system)
+			const strings = {
+				en: {
+					player_1: 'PLAYER 1',
+					score: 'SCORE',
+					lines: 'LINES',
+					runs_on: 'RUNS ON',
+					runway: level => `LVL ${level}\u202FRUNWAY`,
+					runway_achieved: level => `LVL ${level}\u202FSCORE`,
+				},
+				vn: {
+					player_1: 'NGƯỜI CHƠI 1',
+					score: 'ĐIỂM',
+					lines: 'HÀNG',
+					runs_on: 'CHẠY TRÊN',
+					runway: level => `LVL ${level}\u202FTỐI ĐA`,
+					runway_achieved: level => `LVL ${level}\u202FĐẠT ĐƯỢC`,
+				},
+			}[lang];
 
 			const player_template = document.getElementById('player');
 			const players = [];
@@ -873,7 +897,7 @@
 								} else if (frame.raw.level === threshold_level) {
 									player.dom.runways_box.querySelector(
 										`.label .lv${threshold_level}`
-									).textContent = `LVL ${frame.raw.level} ĐẠT ĐƯỢC`;
+									).textContent = strings.runway_achieved(frame.raw.level);
 								}
 							}
 						};
@@ -902,7 +926,7 @@
 						[19, 29, 39].forEach(level => {
 							player.dom.runways_box.querySelector(
 								`.label .lv${level}`
-							).textContent = `LVL ${level} TỐI ĐA`;
+							).textContent = strings.runway(level);
 
 							player.dom.runways_box.querySelector(
 								`.value .lv${level}`
@@ -1080,26 +1104,6 @@
 				});
 			});
 
-			// handle localizations (poor man system)
-			const strings = {
-				en: {
-					player_1: 'PLAYER 1',
-					score: 'SCORE',
-					lines: 'LINES',
-					runs_on: 'RUNS ON',
-				},
-				vn: {
-					player_1: 'NGƯỜI CHƠI 1',
-					score: 'ĐIỂM',
-					lines: 'HÀNG',
-					runs_on: 'CHẠY TRÊN',
-				},
-			}[
-				/^en$/.test(QueryString.get('ui_lang'))
-					? QueryString.get('ui_lang')
-					: 'vn'
-			];
-
 			[...document.querySelectorAll('.player')].forEach(player_node => {
 				player_node.querySelector('.name .header').textContent =
 					strings.player_1;
@@ -1111,6 +1115,15 @@
 				if (runs_on) {
 					runs_on.textContent = strings.runs_on;
 				}
+
+				[19, 29, 39].forEach(level => {
+					const runways_lbl = player_node.querySelector(
+						`.runways .label .lv${level}`
+					);
+					if (runways_lbl) {
+						runways_lbl.textContent = strings.runway(level);
+					}
+				});
 			});
 
 			if (CYCLE_TDIFF) {
