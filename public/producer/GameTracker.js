@@ -54,6 +54,13 @@ export default class GameTracker extends EventTarget {
 	_getLevelFromLines(lines, ocr_level_digits) {
 		if (lines === null || ocr_level_digits === null) return null;
 		if (!this.transition) return GameTracker.digitsToValue(ocr_level_digits);
+		// Transition trainer check
+		if (
+			lines < 14 &&
+			this.start_level != GameTracker.digitsToValue(ocr_level_digits)
+		)
+			this.transition = 10;
+
 		if (lines < this.transition) return this.start_level;
 		return this.start_level + 1 + Math.floor((lines - this.transition) / 10);
 	}
